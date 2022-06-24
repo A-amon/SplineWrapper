@@ -1,0 +1,43 @@
+[
+	{
+	  "name": "London",
+	  "position": [51.5072, -0.1276]
+	},
+	{
+	  "name": "Paris",
+	  "position": [48.8566, 2.3522]
+	},
+	{
+	  "name": "Malaysia",
+	  "position": [4.2105, 101.9758]
+	},
+	{
+	  "name": "Vietname",
+	  "position": [14.0583, 108.2772]
+	},
+	{
+		"name":"Africa",
+		"position":[24.9744, 28.114883]
+	},
+	{
+		"name":"Japan",
+		"position":[35.652832, 139.839478]
+	},
+	{
+		"name":"Indonesia",
+		"position":[-2.5489, 118.0149]
+	},
+	{
+		"name":"Russia",
+		"position":[55.751244, 37.618423]
+	},
+	{
+		"name":"Taiwan",
+		"position":[25.105497, 121.597366]
+	},
+	{
+		"name":"Canada",
+		"position":[43.780918, -79.421371]
+	}
+  ]
+  
