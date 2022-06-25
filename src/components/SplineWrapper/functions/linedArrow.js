@@ -16,11 +16,11 @@ const createArrow = (posFrom, posTo) => {
 	return {
 		type: "Feature",
 		properties: {
-		// tangent rule to calculate rotation of angle
-		// based on destination position from source position
-		angle:
-			((Math.atan((posTo[1] - posFrom[1]) / (posTo[0] - posFrom[0])) *
-			-1 * 180) / Math.PI) + getFlipAngle()
+			// tangent rule to calculate rotation of angle
+			// based on destination position from source position
+			angle:((Math.atan((posTo[1] - posFrom[1]) / (posTo[0] - posFrom[0])) *
+				-1 * 180) / Math.PI) + getFlipAngle(),
+			isArrow:true
 		},
 		geometry: {
 		type: "Point",
