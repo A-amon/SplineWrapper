@@ -21,11 +21,10 @@ Here is a screenshot of the output after using both functions provided:
 
 ### Getting Started
 #### Setup
-- In your project directory, `npm install react-map-gl mapbox-gl d3`
-- Download [SplineWrapper](https://github.com/A-amon/SplineWrapper/tree/main/src/components/SplineWrapper) directory and add it to your project  
+- In your project directory, `npm install spline-wrapper` ([NPM package site](https://www.npmjs.com/package/spline-wrapper)) 
 
 #### How to use SplineWrapper
-- Import the component: `import SplineWrapper from PATH/SplineWrapper`
+- Import the component: `import SplineWrapper from "spline-wrapper"`
 - Already have an existing Source and Layer components? Don't have them yet? Not an issue! 😉  
 ```js
 <Map>
@@ -67,8 +66,8 @@ const lines = [
 Still confused? Check out the example [here](https://github.com/A-amon/SplineWrapper/blob/main/src/App.js) 😁
 
 
-### Notes
-- There is no `control points` prop (to control the curve level/intensity) available at the moment **but might add it if lots of people need it**
+### Notes 📝
+- There is no `control points` prop (to control the curve level/intensity) available at the moment **but might be added if lots of people need it**
 - Curves are only applied to lines generated from the `lines` prop
 - Load and add icon image before passing the name to `iconImage` prop
 - The arrows are applied to every feature of type `LineString` (**including** those generated from `lines` prop)
