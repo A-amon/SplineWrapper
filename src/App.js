@@ -52,8 +52,10 @@ export default function App() {
         >
           <SplineWrapper
             lines={lines}
-            hasArrow={true}
-            iconImage="arrow"
+            arrow={{
+				icon:"arrow",
+				position:"center"
+			}}
           >
             <Source
               type="geojson"

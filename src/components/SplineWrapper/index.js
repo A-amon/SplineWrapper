@@ -1,5 +1,5 @@
 import PropType from "prop-types";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Source, Layer } from "react-map-gl";
 import { createArrow } from "./functions/linedArrow";
 import { createSpline } from "./functions/spline";
@@ -7,15 +7,18 @@ import { createSpline } from "./functions/spline";
 /**
  * @description Wrapper component for [react-map-gl](https://github.com/visgl/react-map-gl) Source component. 
  * Create curved lines for positions defined in lines prop.
- * Add arrow to end of lines
- * @param {{
- * 		children:import("react-map-gl").Source,
- * 		hasArrow:boolean,
- * 		iconImage: string,
- * 		lines:{from:number[], to:number[], properties?:object}[],
- * }}
+ * Add arrows to start | center | end of lines
+ * @typedef {object} arrow
+ * @property {string} icon 
+ * @property {"start" | "center" | "end"} [position="end"]
+ * 
+ * @param {object} prop
+ * @param {import("react-map-gl").Source} prop.children
+ * @param {arrow} [prop.arrow]
+ * @param {{from:number[], to:number[], properties?:object}[]} [prop.lines]
+ * 
  */
-const SplineWrapper = ({ children, hasArrow, iconImage, lines }) => {
+const SplineWrapper = ({ children, arrow, lines }) => {
 	const [featureCollection, setFeatureCollection] = useState()
 	const [features, setFeatures] = useState([]);
 
@@ -50,18 +53,17 @@ const SplineWrapper = ({ children, hasArrow, iconImage, lines }) => {
 		const arrowFeatures = [];
 
 		/**
-		 * Interpolate between a pair of lines
-		 * Use catmull rom formula
+		 * Interpolate between pairs of lines
 		 */
 		if (lines && lines.length > 0) {
 			splineLineFeatures = createSpline(lines)
 		}
 
 		/**
-		 * Add arrow to end of each line
-		 * Arrow lines to line's direction
+		 * Add arrow to each line
+		 * Arrow points to line's direction
 		 */
-		if (hasArrow && featureCollection) {
+		if (arrow && featureCollection) {
 			const { features } = featureCollection;
 			const existingLines = features.filter(
 				(feature) => feature.geometry.type === "LineString"
@@ -72,12 +74,21 @@ const SplineWrapper = ({ children, hasArrow, iconImage, lines }) => {
 				const {
 				geometry: { coordinates }
 				} = line;
-				const lastCoordinateIndex = coordinates.length - 1;
+
+				const {position} = arrow
+				let positionIndex = coordinates.length - 1
+
+				if(position === "start"){
+					positionIndex = 1
+				}
+				else if(position === "center"){
+					positionIndex = coordinates.length / 2
+				}
 
 				arrowFeatures.push(
 				createArrow(
-					coordinates[lastCoordinateIndex - 1],
-					coordinates[lastCoordinateIndex]
+					coordinates[positionIndex - 1],
+					coordinates[positionIndex]
 				)
 				);
 			}
@@ -88,7 +99,7 @@ const SplineWrapper = ({ children, hasArrow, iconImage, lines }) => {
 		...splineLineFeatures,
 		...arrowFeatures
 		]);
-	}, [featureCollection, lines, hasArrow]);
+	}, [featureCollection, lines, arrow]);
 
 	const getFeatureCollection = (features) => {
 		if(featureCollection){
@@ -108,12 +119,12 @@ const SplineWrapper = ({ children, hasArrow, iconImage, lines }) => {
 	return (
 		<Source {...sourceComponent.props} data={getFeatureCollection(features)}>
 		{sourceComponent.props.children}
-		{hasArrow && iconImage ? (
+		{arrow && arrow.icon? (
 			<Layer
 			type="symbol"
 			filter={["==", ["get", "isArrow"], true]}
 			layout={{
-				"icon-image": iconImage,
+				"icon-image": arrow.icon,
 				"icon-rotate": ["get", "angle"],
 				"icon-size": 0.045,
 				"icon-rotation-alignment": "map",
@@ -126,10 +137,9 @@ const SplineWrapper = ({ children, hasArrow, iconImage, lines }) => {
 };
 
 SplineWrapper.propTypes = {
-  children: PropType.oneOfType([PropType.arrayOf(PropType.node), PropType.node]),
-  hasArrow: PropType.bool,
-  iconImage: PropType.string,
-  lines: PropType.arrayOf(PropType.object)
+	children: PropType.oneOfType([PropType.arrayOf(PropType.node), PropType.node]),
+	arrow:PropType.object,
+	lines: PropType.arrayOf(PropType.object)
 };
 
 export default SplineWrapper;
